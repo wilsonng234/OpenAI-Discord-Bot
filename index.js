@@ -1,9 +1,9 @@
 import dotenv from "dotenv";
-import axios from "axios";
+import { verifyKey } from "discord-interactions";
+import { InteractionType } from "discord-interactions";
 dotenv.config();
 
-import { verifyKey } from "discord-interactions";
-import { InteractionType, InteractionResponseType } from "discord-interactions";
+import slashCommands from "./utils/slash-commands.js";
 
 const handler = async (event) => {
     const PUBLIC_KEY = process.env.PUBLIC_KEY;
@@ -25,15 +25,9 @@ const handler = async (event) => {
             statusCode: 200,
             body: JSON.stringify({ type: InteractionType.PING }),
         };
+    } else {
+        await slashCommands(body.data.name, body.id, body.token);
     }
-
-    const interactions_url = `https://discord.com/api/v10/interactions/${body.id}/${body.token}/callback`;
-    await axios.post(interactions_url, {
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-            content: "Hello, World",
-        },
-    });
 };
 
 export { handler };
