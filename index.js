@@ -29,7 +29,6 @@ const handler = async (event) => {
         const { id, token, data } = body;
         const { name, options } = data;
 
-        console.log(options);
         await slashCommands(name, options, id, token);
     }
 };
