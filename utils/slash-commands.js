@@ -1,25 +1,35 @@
 import axios from "axios";
-
 import { InteractionResponseType } from "discord-interactions";
 
-const slashCommands = async (name, interactionId, interactionToken) => {
-    const interaction_url = `https://discord.com/api/v10/interactions/${interactionId}/${interactionToken}/callback`;
+import dalleHandler from "./openai/dalle.js";
 
-    if (name === "foo") {
-        await axios.post(interaction_url, {
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-                content: "Hello, World",
-            },
-        });
+const slashCommands = async (
+    name,
+    options,
+    interactionId,
+    interactionToken
+) => {
+    const interactionUrl = `https://discord.com/api/v10/interactions/${interactionId}/${interactionToken}/callback`;
+    const patchInteractionUrl = `https://discord.com/api/v10/webhooks/${process.env.APP_ID}/${interactionToken}/messages/@original`;
+    switch (name) {
+        case "image":
+            await axios.post(interactionUrl, {
+                type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
+            });
+
+            const promptValue = options.find(
+                (option) => option.name === "prompt"
+            ).value;
+            const sizeValue = options.find(
+                (option) => option.name === "size"
+            ).value;
+
+            await axios.patch(patchInteractionUrl, {
+                content: await dalleHandler(promptValue, sizeValue),
+            });
+
+            break;
     }
-
-    await axios.post(interaction_url, {
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-            content: "Hello, World 2",
-        },
-    });
 };
 
 export default slashCommands;
