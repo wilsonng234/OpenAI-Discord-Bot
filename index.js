@@ -26,7 +26,11 @@ const handler = async (event) => {
             body: JSON.stringify({ type: InteractionType.PING }),
         };
     } else {
-        await slashCommands(body.data.name, body.id, body.token);
+        const { id, token, data } = body;
+        const { name, options } = data;
+
+        console.log(options);
+        await slashCommands(name, options, id, token);
     }
 };
 
