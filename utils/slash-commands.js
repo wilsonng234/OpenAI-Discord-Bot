@@ -20,9 +20,8 @@ const slashCommands = async (
             const promptValue = options.find(
                 (option) => option.name === "prompt"
             ).value;
-            const sizeValue = options.find(
-                (option) => option.name === "size"
-            ).value;
+            const sizeValue =
+                options.find((option) => option.name === "size")?.value || "256";
 
             await axios.patch(patchInteractionUrl, {
                 content: await dalleHandler(promptValue, sizeValue),
