@@ -12,39 +12,39 @@ const slashCommands = async (
 ) => {
     const interactionUrl = `https://discord.com/api/v10/interactions/${interactionId}/${interactionToken}/callback`;
     const patchInteractionUrl = `https://discord.com/api/v10/webhooks/${process.env.APP_ID}/${interactionToken}/messages/@original`;
-    switch (name) {
-        case "image":
-            await axios.post(interactionUrl, {
-                type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
-            });
+    await axios.post(interactionUrl, {
+        type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
+    });
 
-            const promptValue = options.find(
-                (option) => option.name === "prompt"
-            ).value;
-            const sizeValue =
-                options.find((option) => option.name === "size")?.value ||
-                "256";
+    let content = null;
+    let error = false;
+    try {
+        switch (name) {
+            case "image":
+                const promptValue = options.find(
+                    (option) => option.name === "prompt"
+                ).value;
+                const sizeValue =
+                    options.find((option) => option.name === "size")?.value ||
+                    "256";
 
-            await axios.patch(patchInteractionUrl, {
-                content: await dalleHandler(promptValue, sizeValue),
-            });
+                content = await dalleHandler(promptValue, sizeValue);
+                break;
+            case "chat":
+                const messageValue = options.find(
+                    (option) => option.name === "message"
+                ).value;
 
-            break;
-        case "chat":
-            console.log("Entered chat");
-            await axios.post(interactionUrl, {
-                type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
-            });
-
-            const messageValue = options.find(
-                (option) => option.name === "message"
-            ).value;
-
-            await axios.patch(patchInteractionUrl, {
-                content: await chatHandler(messageValue),
-            });
-
-            break;
+                content = await chatHandler(messageValue);
+                break;
+        }
+    } catch (error) {
+        content = error.message;
+        error = true;
+    } finally {
+        await axios.patch(patchInteractionUrl, {
+            content: error ? `Error: ${content}` : content,
+        });
     }
 };
 
