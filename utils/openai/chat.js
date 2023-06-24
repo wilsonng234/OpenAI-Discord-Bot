@@ -15,6 +15,10 @@ async function chatHandler(message) {
         return response.data.choices[0].message.content;
     } catch (err) {
         console.log("chatgpt error", err);
+
+        if (err.message === "Request failed with status code 429")
+            return "Error: Too many requests. Please try again later.";
+
         return err.message;
     }
 }
