@@ -9,7 +9,7 @@ There are two functionalities supported by the bot:
 
 ## Installation
 
-NodeJS: version 16.15.1
+NodeJS: version 16.15.1  
 NPM: version 9.6.7
 
 ## Getting Started
@@ -26,7 +26,7 @@ Run `npm install` to install the dependencies
 
 ### Dotenv Configuration
 
-Create a `.env` file in the root directory of the project:
+Create a `.env` file in the root directory of the project:  
 
 ```
 APP_ID={`APPLICATION ID` copied from Discord application's `General Information` page`}
@@ -76,14 +76,14 @@ aws lambda create-function \
 
 ### Slash Commands Registration
 
-Option1 is **not recommended** as it registers commands for all channels and is slower.
-Option2 is **recommended** as it is faster to registers commands for a specific channel.
+Option1 is **not recommended** as it registers commands for all channels and is slower.  
+Option2 is **recommended** as it is faster to registers commands for a specific channel.  
 
-Option 1:
+Option 1:  
 
 1. Register slash commands by running `node .\registerAll.js`
 
-Option 2:
+Option 2:  
 
 1. Add `GUILD_ID={your Discord channel's guild id}` to `.env` file
 2. Run `node .\register.js`
