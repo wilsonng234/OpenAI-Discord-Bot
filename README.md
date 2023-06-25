@@ -92,14 +92,14 @@ Option 2:
 
 ### Chat
 
-1. User input message
+1. User input message  
    ![User input message](imgs/chat/input-message.png)
-2. Bot respond message
+2. Bot respond message  
    ![Bot respond message](imgs/chat/respond-message.png)
 
 ### Image
 
-1. User input prompt and size(optional)
+1. User input prompt and size(optional)  
    ![User input prompt and size](imgs/image/input-prompt.png)
-2. Bot respond image
+2. Bot respond image  
    ![Bot respond image](imgs/image/respond-image.png)
