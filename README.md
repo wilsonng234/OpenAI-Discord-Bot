@@ -9,7 +9,7 @@ There are two functionalities supported by the bot:
 
 ## Architecture
 
-![AWS Architecture Diagram](diagrams/v0.0/v0.0.0.drawio.png)
+![AWS Architecture Diagram](diagrams/v0.0/v0.0.1.drawio.png)
 
 ## Installation
 
