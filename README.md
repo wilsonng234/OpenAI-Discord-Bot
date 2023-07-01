@@ -86,12 +86,12 @@ Option2 is **recommended** as it is faster to registers commands for a specific 
 
 Option 1:
 
-1. Register slash commands by running `node .\registerAll.js`
+1. Register slash commands by running `node discord\registerAll.js`
 
 Option 2:
 
 1. Add `GUILD_ID={your Discord channel's guild id}` to `.env` file
-2. Run `node .\register.js`
+2. Run `node discord\register.js`
 
 ## Use cases
 
