@@ -21,7 +21,7 @@ NPM: version 9.6.7
 
 ### Installing Dependencies
 
-Run `npm install` to install the dependencies
+Run `npm ci` to install the dependencies
 
 ### Discord Bot Configuration
 
