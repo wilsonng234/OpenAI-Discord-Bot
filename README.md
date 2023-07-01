@@ -9,10 +9,11 @@ There are two functionalities supported by the bot:
 
 ## Architecture
 
-![AWS Architecture Diagram](diagrams/v0.0/v0.0.1.drawio.png)
+![AWS Architecture Diagram](diagrams/v0.0/v0.0.2.drawio.png)
 
 ## Installation
 
+AWSCLI: version   
 NodeJS: version 16.15.1  
 NPM: version 9.6.7
 
@@ -42,12 +43,12 @@ OPENAI_API_KEY={OpenAI API key}
 
 ### AWS Lambda Configuration
 
-1. Create the execution role that gives your function permission to access AWS resources
+1. Create the execution role that gives your function permission to access AWS resources  
    `aws iam create-role --role-name ${custom role name} --assume-role-policy-document file://trust-policy.json`
 2. To add permissions to the role, use the attach-policy-to-role command.
-   Start by adding the AWSLambdaBasicExecutionRole managed policy
+   Start by adding the AWSLambdaBasicExecutionRole managed policy  
    `aws iam attach-role-policy --role-name ${custom role name as above} --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole`
-3. Zip the function code
+3. Zip the function code  
    `zip -r OpenAI-Discord-Bot.zip .`
 4. Create a Lambda function with the create-function command
 
@@ -60,22 +61,22 @@ aws lambda create-function \
 --role arn:aws:iam::$(aws sts get-caller-identity --query "Account" --output text):role/${custom role name as above}
 ```
 
-5. Configure timeout as 1 minute with the update-function-configuration command
+5. Configure timeout as 1 minute with the update-function-configuration command  
    `aws lambda update-function-configuration --function-name ${custom lambda function name as above} --timeout 60`
 
-6. Go to AWS Lambda console to `Add Trigger` for the function.
-   Choose `API Gateway` and `Create a new API`.
-   Choose `HTTP API` and `Open` for security.
-   Set up `API name` and select `CORS` in additional settings
+6. Go to AWS Lambda console to `Add Trigger` for the function.  
+   Choose `API Gateway` and `Create a new API`.  
+   Choose `HTTP API` and `Open` for security.  
+   Set up `API name` and select `CORS` in additional settings  
 7. Copy the `API endpoint` of the created `API Gateway`
 
 ### Discord Bot Interaction Setup
 
-1. Go to Discord application as created above
-2. Paste `API endpoint` of `API Gateway` into the `INTERACTIONS ENDPOINT URL` field of the application's `General Information` page
+1. Go to Discord application as created above  
+2. Paste `API endpoint` of `API Gateway` into the `INTERACTIONS ENDPOINT URL` field of the application's `General Information` page  
 3. Go to OAuth2 section → URL Generator.  
    Scopes: `bot`, `application.commands`.  
-   Bot permissions: `Use Slash Commands`.
+   Bot permissions: `Use Slash Commands`.  
    Use the generated URL to invite the bot to your channel
 
 ### Slash Commands Registration
