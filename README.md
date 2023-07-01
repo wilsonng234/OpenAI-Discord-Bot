@@ -13,7 +13,7 @@ There are two functionalities supported by the bot:
 
 ## Installation
 
-AWSCLI: version   
+AWS-CLI: version 2.12.6  
 NodeJS: version 16.15.1  
 NPM: version 9.6.7
 
