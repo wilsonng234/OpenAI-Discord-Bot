@@ -47,15 +47,15 @@ OPENAI_API_KEY={OpenAI API key}
 
 ### AWS Lambda Configuration
 
-1. Create the execution role that gives your function permission to access AWS resources  
+1. Create an execution role  
    `aws iam create-role --role-name openai-discord-bot-lambda-role --assume-role-policy-document file://trust-policy.json`
-2. Add AWSLambdaBasicExecutionRole managed policy to the role
+2. Add AWSLambdaBasicExecutionRole managed policy to the role  
    `aws iam attach-role-policy --role-name openai-discord-bot-lambda-role --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole`
-3. Add AmazonDynamoDBFullAccess managed policy to the role
+3. Add AmazonDynamoDBFullAccess managed policy to the role  
    `aws iam attach-role-policy --role-name openai-discord-bot-lambda-role --policy-arn arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess`
 4. Zip the function code  
    `zip -r OpenAI-Discord-Bot.zip .`
-5. Create a Lambda function with the create-function command
+5. Create a Lambda function
 
 ```
 aws lambda create-function `
@@ -66,14 +66,14 @@ aws lambda create-function `
 --role arn:aws:iam::$(aws sts get-caller-identity --query "Account" --output text):role/openai-discord-bot-lambda-role
 ```
 
-5. Configure timeout as 1 minute with the update-function-configuration command  
-   `aws lambda update-function-configuration --function-name openai-discord-bot-lambda-function --timeout 60`
+1. Configure timeout as 900 seconds  
+   `aws lambda update-function-configuration --function-name openai-discord-bot-lambda-function --timeout 900`
 
-6. Go to AWS Lambda console to `Add Trigger` for the function.  
+2. Go to AWS Lambda console to `Add Trigger` for the function.  
    Choose `API Gateway` and `Create a new API`.  
    Choose `HTTP API` and `Open` for security.  
    Set up `API name` and select `CORS` in additional settings
-7. Copy the `API endpoint` of the created `API Gateway`
+3. Copy the `API endpoint` of the created `API Gateway`
 
 ### Discord Bot Interaction Setup
 
