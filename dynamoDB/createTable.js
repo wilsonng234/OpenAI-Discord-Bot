@@ -11,21 +11,21 @@ const command = new CreateTableCommand({
     TableName: "Messages",
     AttributeDefinitions: [
         {
-            AttributeName: "userId",
+            AttributeName: "userId_guildId_channelId",
             AttributeType: "S",
         },
         {
-            AttributeName: "channelId_messageId",
+            AttributeName: "createTime",
             AttributeType: "S",
         },
     ],
     KeySchema: [
         {
-            AttributeName: "userId",
+            AttributeName: "userId_guildId_channelId",
             KeyType: "HASH",
         },
         {
-            AttributeName: "channelId_messageId",
+            AttributeName: "createTime",
             KeyType: "RANGE",
         },
     ],
