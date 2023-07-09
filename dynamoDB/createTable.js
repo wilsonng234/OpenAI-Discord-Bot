@@ -16,7 +16,7 @@ const command = new CreateTableCommand({
         },
         {
             AttributeName: "createTime",
-            AttributeType: "S",
+            AttributeType: "N",
         },
     ],
     KeySchema: [
