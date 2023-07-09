@@ -10,4 +10,4 @@ const writeItem = async (tableName, item) => {
     return await docClient.send(command);
 };
 
-export default writeItem;
+export { writeItem };
