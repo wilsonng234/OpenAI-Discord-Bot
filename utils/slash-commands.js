@@ -3,14 +3,11 @@ import axios from "axios";
 import dalleHandler from "./openai/dalle.js";
 import chatHandler from "./openai/chat.js";
 
-const slashCommands = async (body) => {
+const slashCommands = async (body, timeEpoch) => {
     // Initialize variables
-    const { token: interactionToken, data, member, guild, channel } = body;
+    const { token: interactionToken, data } = body;
     const patchInteractionUrl = `https://discord.com/api/v10/webhooks/${process.env.APP_ID}/${interactionToken}/messages/@original`;
     const { name, options } = data;
-    const userId = member.id;
-    const guildId = guild.id;
-    const channelId = channel.id;
 
     // Calling the handlers
     let content = null;
@@ -31,11 +28,14 @@ const slashCommands = async (body) => {
                 const messageValue = options.find(
                     (option) => option.name === "message"
                 ).value;
+
+                const { member, guild, channel } = body;
                 content = await chatHandler(
                     messageValue,
-                    userId,
-                    guildId,
-                    channelId
+                    member.user.id,
+                    guild.id,
+                    channel.id,
+                    timeEpoch
                 );
                 break;
         }

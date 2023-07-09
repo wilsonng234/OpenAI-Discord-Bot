@@ -37,7 +37,7 @@ const handler = async (event) => {
         });
 
         // Handle the slash command
-        await slashCommands(body);
+        await slashCommands(body, event.requestContext.requestTimeEpoch);
     }
 };
 
