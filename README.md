@@ -23,6 +23,10 @@ NPM: version 9.6.7
 
 Run `npm ci` to install the dependencies
 
+### DynamoDB Configuration
+
+Run `node .\dynamoDB\createTable.js` to create the DynamoDB table
+
 ### Discord Bot Configuration
 
 1. Create a new Discord application at https://discord.com/developers/applications
@@ -44,36 +48,37 @@ OPENAI_API_KEY={OpenAI API key}
 ### AWS Lambda Configuration
 
 1. Create the execution role that gives your function permission to access AWS resources  
-   `aws iam create-role --role-name ${custom role name} --assume-role-policy-document file://trust-policy.json`
-2. To add permissions to the role, use the attach-policy-to-role command.
-   Start by adding the AWSLambdaBasicExecutionRole managed policy  
-   `aws iam attach-role-policy --role-name ${custom role name as above} --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole`
-3. Zip the function code  
+   `aws iam create-role --role-name openai-discord-bot-lambda-role --assume-role-policy-document file://trust-policy.json`
+2. Add AWSLambdaBasicExecutionRole managed policy to the role
+   `aws iam attach-role-policy --role-name openai-discord-bot-lambda-role --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole`
+3. Add AmazonDynamoDBFullAccess managed policy to the role
+   `aws iam attach-role-policy --role-name openai-discord-bot-lambda-role --policy-arn arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess`
+4. Zip the function code  
    `zip -r OpenAI-Discord-Bot.zip .`
-4. Create a Lambda function with the create-function command
+5. Create a Lambda function with the create-function command
 
 ```
-aws lambda create-function \
---function-name ${custom lambda function name} \
---zip-file fileb://OpenAI-Discord-Bot.zip \
---handler index.handler \
---runtime nodejs18.x \
---role arn:aws:iam::$(aws sts get-caller-identity --query "Account" --output text):role/${custom role name as above}
+aws lambda create-function `
+--function-name openai-discord-bot-lambda-function `
+--zip-file fileb://OpenAI-Discord-Bot.zip `
+--handler index.handler `
+--runtime nodejs18.x `
+--role arn:aws:iam::$(aws sts get-caller-identity --query "Account" --output text):role/openai-discord-bot-lambda-role
 ```
 
 5. Configure timeout as 1 minute with the update-function-configuration command  
-   `aws lambda update-function-configuration --function-name ${custom lambda function name as above} --timeout 60`
+   `aws lambda update-function-configuration --function-name openai-discord-bot-lambda-function --timeout 60`
 
 6. Go to AWS Lambda console to `Add Trigger` for the function.  
    Choose `API Gateway` and `Create a new API`.  
    Choose `HTTP API` and `Open` for security.  
-   Set up `API name` and select `CORS` in additional settings  
+   Set up `API name` and select `CORS` in additional settings
 7. Copy the `API endpoint` of the created `API Gateway`
 
 ### Discord Bot Interaction Setup
 
-1. Go to Discord application as created above  
-2. Paste `API endpoint` of `API Gateway` into the `INTERACTIONS ENDPOINT URL` field of the application's `General Information` page  
+1. Go to Discord application as created above
+2. Paste `API endpoint` of `API Gateway` into the `INTERACTIONS ENDPOINT URL` field of the application's `General Information` page
 3. Go to OAuth2 section → URL Generator.  
    Scopes: `bot`, `application.commands`.  
    Bot permissions: `Use Slash Commands`.  
@@ -86,12 +91,12 @@ Option2 is **recommended** as it is faster to registers commands for a specific 
 
 Option 1:
 
-1. Register slash commands by running `node discord\registerAll.js`
+1. Register slash commands by running `node .\discord\registerAll.js`
 
 Option 2:
 
 1. Add `GUILD_ID={your Discord channel's guild id}` to `.env` file
-2. Run `node discord\register.js`
+2. Run `node .\discord\register.js`
 
 ## Use cases
 
