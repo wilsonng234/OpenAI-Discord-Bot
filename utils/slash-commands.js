@@ -1,24 +1,16 @@
 import axios from "axios";
-import { InteractionResponseType } from "discord-interactions";
 
 import dalleHandler from "./openai/dalle.js";
 import chatHandler from "./openai/chat.js";
 
-const slashCommands = async (event) => {
+const slashCommands = async (body) => {
     // Initialize variables
-    console.log("event:", event);
-    const { id: interactionId, token, data, member, guild, channel } = body;
-    const { name, options } = data;
-    const { user } = member;
-    const { id: userId } = user;
-    const { id: guildId } = guild;
-    const { id: channelId } = channel;
-
-    const interactionUrl = `https://discord.com/api/v10/interactions/${interactionId}/${interactionToken}/callback`;
+    const { token: interactionToken, data, member, guild, channel } = body;
     const patchInteractionUrl = `https://discord.com/api/v10/webhooks/${process.env.APP_ID}/${interactionToken}/messages/@original`;
-    await axios.post(interactionUrl, {
-        type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
-    });
+    const { name, options } = data;
+    const userId = member.id;
+    const guildId = guild.id;
+    const channelId = channel.id;
 
     // Calling the handlers
     let content = null;
@@ -39,7 +31,12 @@ const slashCommands = async (event) => {
                 const messageValue = options.find(
                     (option) => option.name === "message"
                 ).value;
-                content = await chatHandler(messageValue);
+                content = await chatHandler(
+                    messageValue,
+                    userId,
+                    guildId,
+                    channelId
+                );
                 break;
         }
     } catch (error) {

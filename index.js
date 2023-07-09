@@ -1,7 +1,10 @@
 import dotenv from "dotenv";
+dotenv.config();
+
+import axios from "axios";
 import { verifyKey } from "discord-interactions";
 import { InteractionType } from "discord-interactions";
-dotenv.config();
+import { InteractionResponseType } from "discord-interactions";
 
 import slashCommands from "./utils/slash-commands.js";
 
@@ -26,7 +29,15 @@ const handler = async (event) => {
             body: JSON.stringify({ type: InteractionType.PING }),
         };
     } else {
-        await slashCommands(event);
+        // Defer the reply to slash command
+        const { id: interactionId, token: interactionToken } = body;
+        const interactionUrl = `https://discord.com/api/v10/interactions/${interactionId}/${interactionToken}/callback`;
+        await axios.post(interactionUrl, {
+            type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
+        });
+
+        // Handle the slash command
+        await slashCommands(body);
     }
 };
 
