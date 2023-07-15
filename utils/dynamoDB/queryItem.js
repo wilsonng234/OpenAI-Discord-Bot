@@ -11,7 +11,6 @@ const queryItem = async (
         TableName: tableName,
         KeyConditionExpression: keyConditionExpression,
         ExpressionAttributeValues: expressionAttributeValues,
-        ConsistentRead: true,
         ...rest,
     });
 
