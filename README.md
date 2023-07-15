@@ -98,7 +98,7 @@ Option 1:
 
 Option 2:
 
-1. Add `GUILD_ID={your Discord channel's guild id}` to `.env` file
+1. Add `GUILD_ID={your Discord channel's guild id}` to Lambda environment variables
 2. Run `node .\discord\register.js`
 
 ## Use cases
