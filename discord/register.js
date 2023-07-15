@@ -1,8 +1,14 @@
-const globalApplicationCommandsUrl = `https://discord.com/api/v8/applications/${process.env.APP_ID}/guilds/${process.env.GUILD_ID}/commands`;
+import axios from "axios";
+
+const appId = "Please enter your app id here";
+const guildId = "Please enter your guild id here";
+const botToken = "Please enter your bot token here";
+
+const guildApplicationCommandsUrl = `https://discord.com/api/v8/applications/${appId}/guilds/${guildId}/commands`;
 
 const headers = {
     "Content-Type": "application/json",
-    Authorization: `Bot ${process.env.BOT_TOKEN}`,
+    Authorization: `Bot ${botToken}`,
 };
 
 const names = ["image", "chat"];
@@ -60,10 +66,10 @@ await Promise.all(
     jsons.map(async (json) => {
         const strJson = JSON.stringify(json);
         const config = { headers };
-        await axios.post(globalApplicationCommandsUrl, strJson, config);
+        await axios.post(guildApplicationCommandsUrl, strJson, config);
 
         console.log(`Successfully registered command ${json.name}`);
     })
 );
 
-console.log("Successfully registered all global commands");
+console.log("Successfully registered all commands");
