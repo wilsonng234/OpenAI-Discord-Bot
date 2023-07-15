@@ -94,11 +94,12 @@ Option2 is **recommended** as it is faster to registers commands for a specific 
 
 Option 1:
 
-1. Register slash commands by running `node .\discord\registerAll.js`
+1. Fill in `appId` and `botToken` in `.\discord\registerAll.js`
+2. Register slash commands by running `node .\discord\registerAll.js`
 
 Option 2:
 
-1. Add `GUILD_ID={your Discord channel's guild id}` to Lambda environment variables
+1. Fill in `appId`, `guildId` and `botToken` in `.\discord\register.js`
 2. Run `node .\discord\register.js`
 
 ## Use cases

@@ -1,10 +1,14 @@
 import axios from "axios";
 
-const guildApplicationCommandsUrl = `https://discord.com/api/v8/applications/${process.env.APP_ID}/guilds/${process.env.GUILD_ID}/commands`;
+const appId = "Please enter your app id here";
+const guildId = "Please enter your guild id here";
+const botToken = "Please enter your bot token here";
+
+const guildApplicationCommandsUrl = `https://discord.com/api/v8/applications/${appId}/guilds/${guildId}/commands`;
 
 const headers = {
     "Content-Type": "application/json",
-    Authorization: `Bot ${process.env.BOT_TOKEN}`,
+    Authorization: `Bot ${botToken}`,
 };
 
 const names = ["image", "chat"];

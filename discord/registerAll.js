@@ -1,10 +1,13 @@
 import axios from "axios";
 
-const globalApplicationCommandsUrl = `https://discord.com/api/v8/applications/${process.env.APP_ID}/commands`;
+const appId = "Please enter your app id here";
+const botToken = "Please enter your bot token here";
+
+const globalApplicationCommandsUrl = `https://discord.com/api/v8/applications/${appId}/commands`;
 
 const headers = {
     "Content-Type": "application/json",
-    Authorization: `Bot ${process.env.BOT_TOKEN}`,
+    Authorization: `Bot ${botToken}`,
 };
 
 const names = ["image", "chat"];
