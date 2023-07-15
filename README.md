@@ -1,6 +1,7 @@
 # OpenAI Discord Bot
 
-This project is a Discord bot using OpenAI models to generate messages and images based on user inputs.
+This project is a Discord bot using OpenAI models to generate messages and images based on user inputs.  
+It is developed using AWS Lambda to provide pay-as-you-go serverless computing service and connects to a DynamoDB backend service to store the chat history.
 
 There are two functionalities supported by the bot:
 
@@ -9,7 +10,7 @@ There are two functionalities supported by the bot:
 
 ## Architecture
 
-![AWS Architecture Diagram](diagrams/v0.0/v0.0.2.drawio.png)
+![AWS Architecture Diagram](diagrams/v0.0/v0.0.3.drawio.png)
 
 ## Installation
 
