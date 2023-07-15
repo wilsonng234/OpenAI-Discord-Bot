@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const globalApplicationCommandsUrl = `https://discord.com/api/v8/applications/${process.env.APP_ID}/commands`;
 
 const headers = {
