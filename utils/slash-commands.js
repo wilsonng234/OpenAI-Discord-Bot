@@ -1,21 +1,15 @@
 import axios from "axios";
-import { InteractionResponseType } from "discord-interactions";
 
 import dalleHandler from "./openai/dalle.js";
 import chatHandler from "./openai/chat.js";
 
-const slashCommands = async (
-    name,
-    options,
-    interactionId,
-    interactionToken
-) => {
-    const interactionUrl = `https://discord.com/api/v10/interactions/${interactionId}/${interactionToken}/callback`;
+const slashCommands = async (body, timeEpoch) => {
+    // Initialize variables
+    const { token: interactionToken, data } = body;
     const patchInteractionUrl = `https://discord.com/api/v10/webhooks/${process.env.APP_ID}/${interactionToken}/messages/@original`;
-    await axios.post(interactionUrl, {
-        type: InteractionResponseType.DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE,
-    });
+    const { name, options } = data;
 
+    // Calling the handlers
     let content = null;
     let error = false;
     try {
@@ -35,7 +29,14 @@ const slashCommands = async (
                     (option) => option.name === "message"
                 ).value;
 
-                content = await chatHandler(messageValue);
+                const { member, guild, channel } = body;
+                content = await chatHandler(
+                    messageValue,
+                    member.user.id,
+                    guild.id,
+                    channel.id,
+                    timeEpoch
+                );
                 break;
         }
     } catch (error) {
