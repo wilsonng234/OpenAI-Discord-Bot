@@ -1,7 +1,7 @@
 # OpenAI Discord Bot
 
 This project is a Discord bot using OpenAI models to generate messages and images based on user inputs.  
-It is developed using AWS Lambda to provide pay-as-you-go serverless computing service and connects to a DynamoDB backend service to store the chat history.
+It is developed using AWS Lambda to provide pay-as-you-go serverless discord bot and connects to a DynamoDB backend server to store the chat history.
 
 There are two functionalities supported by the bot:
 
@@ -34,18 +34,6 @@ Run `node .\dynamoDB\createTable.js` to create the DynamoDB table
 2. Copy `APPLICATION ID` and `PUBLIC KEY` from the application's `General Information` page
 3. Copy `TOKEN` from the application's `Bot` page
 
-### Dotenv Configuration
-
-Create a `.env` file in the root directory of the project:
-
-```
-APP_ID={`APPLICATION ID` copied from Discord application's `General Information` page`}
-PUBLIC_KEY={`PUBLIC KEY` copied from Discord application's `General Information` page}
-BOT_TOKEN={`TOKEN` copied from Discord application's `Bot` page`}
-
-OPENAI_API_KEY={OpenAI API key}
-```
-
 ### AWS Lambda Configuration
 
 1. Create an execution role  
@@ -67,27 +55,40 @@ aws lambda create-function `
 --role arn:aws:iam::$(aws sts get-caller-identity --query "Account" --output text):role/openai-discord-bot-lambda-role
 ```
 
-1. Configure timeout as 900 seconds  
+6. Configure timeout as 900 seconds  
    `aws lambda update-function-configuration --function-name openai-discord-bot-lambda-function --timeout 900`
 
-2. Go to AWS Lambda console to `Add Trigger` for the function.  
+7. Go to AWS Lambda console to `Add Trigger` for the function.  
    Choose `API Gateway` and `Create a new API`.  
    Choose `HTTP API` and `Open` for security.  
    Set up `API name` and select `CORS` in additional settings
-3. Copy the `API endpoint` of the created `API Gateway`
+8. Copy the `API endpoint` of the created `API Gateway`
+9. Go to AWS Lambda console to set up environment variables for the function.
+   Encryption in transit using AWS KMS key shall be applied to secure the sensitive information.
+   Choose `Configuration` tab.
+   Choose `Environment variables` and `Edit`.
+   Add the following keys:
+
+    ```
+    APP_ID={`APPLICATION ID` copied from Discord application's `General Information` page`}
+    PUBLIC_KEY={`PUBLIC KEY` copied from Discord application's `General Information` page}
+    BOT_TOKEN={`TOKEN` copied from Discord application's `Bot` page`}
+
+    OPENAI_API_KEY={OpenAI API key}
+    ```
 
 ### Discord Bot Interaction Setup
 
 1. Go to Discord application as created above
 2. Paste `API endpoint` of `API Gateway` into the `INTERACTIONS ENDPOINT URL` field of the application's `General Information` page
-3. Go to OAuth2 section → URL Generator.  
-   Scopes: `bot`, `application.commands`.  
-   Bot permissions: `Use Slash Commands`.  
+3. Go to OAuth2 section → URL Generator.
+   Scopes: `bot`, `application.commands`.
+   Bot permissions: `Use Slash Commands`.
    Use the generated URL to invite the bot to your channel
 
 ### Slash Commands Registration
 
-Option1 is **not recommended** as it registers commands for all channels and is slower.  
+Option1 is **not recommended** as it registers commands for all channels and is slower.
 Option2 is **recommended** as it is faster to registers commands for a specific channel.
 
 Option 1:
@@ -103,14 +104,18 @@ Option 2:
 
 ### Chat
 
-1. User input message  
+1. User input message
    ![User input message](imgs/chat/input-message.png)
-2. Bot respond message  
+2. Bot respond message
    ![Bot respond message](imgs/chat/respond-message.png)
 
 ### Image
 
-1. User input prompt and size(optional)  
+1. User input prompt and size(optional)
    ![User input prompt and size](imgs/image/input-prompt.png)
-2. Bot respond image  
+2. Bot respond image
    ![Bot respond image](imgs/image/respond-image.png)
+
+```
+
+```

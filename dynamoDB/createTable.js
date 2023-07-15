@@ -1,5 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { CreateTableCommand } from "@aws-sdk/client-dynamodb";
 

@@ -1,6 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
-
 import axios from "axios";
 import { verifyKey } from "discord-interactions";
 import { InteractionType } from "discord-interactions";
