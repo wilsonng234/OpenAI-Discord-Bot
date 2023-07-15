@@ -93,7 +93,7 @@ aws lambda create-function `
 ### Slash Commands Registration
 
 Option1 is **not recommended** as it registers commands for all channels and is slower.  
-Option2 is **recommended** as it is faster to registers commands for a specific channel.  
+Option2 is **recommended** as it is faster to register commands for a specific channel.  
 
 Option 1:
 
