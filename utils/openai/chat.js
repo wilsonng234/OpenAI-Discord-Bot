@@ -2,7 +2,7 @@ import { writeItem } from "../dynamoDB/writeItem.js";
 import { queryItem } from "../dynamoDB/queryItem.js";
 import { Configuration, OpenAIApi } from "openai";
 
-const limit = 30;
+const limit = 20;
 
 async function chatHandler(message, userId, guildId, channelId, timeEpoch) {
     const configuration = new Configuration({
@@ -50,11 +50,8 @@ async function chatHandler(message, userId, guildId, channelId, timeEpoch) {
             model: "gpt-3.5-turbo",
             messages: chatMessages,
         });
+
         const responseMessage = response.data.choices[0].message.content;
-        if (responseMessage.length > 2000)
-            throw new Error(
-                "Error: Response message exceeds 2000 characters limit. Please ask the bot to generate a shorter response."
-            );
 
         writeItem("Messages", {
             userId_guildId_channelId: `${userId}_${guildId}_${channelId}`,
