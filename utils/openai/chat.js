@@ -2,7 +2,7 @@ import { writeItem } from "../dynamoDB/writeItem.js";
 import { queryItem } from "../dynamoDB/queryItem.js";
 import { Configuration, OpenAIApi } from "openai";
 
-const limit = 30;
+const limit = 20;
 
 async function chatHandler(message, userId, guildId, channelId, timeEpoch) {
     const configuration = new Configuration({
@@ -50,6 +50,7 @@ async function chatHandler(message, userId, guildId, channelId, timeEpoch) {
             model: "gpt-3.5-turbo",
             messages: chatMessages,
         });
+
         const responseMessage = response.data.choices[0].message.content;
 
         writeItem("Messages", {
