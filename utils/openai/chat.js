@@ -4,6 +4,20 @@ import { Configuration, OpenAIApi } from "openai";
 
 const limit = 20;
 
+const summarize = async (openai, msg) => {
+    const response = await openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
+        messages: [
+            {
+                role: "user",
+                content: `Summarize the following message: ${msg}`,
+            },
+        ],
+    });
+
+    return response.data.choices[0].message.content;
+};
+
 async function chatHandler(message, userId, guildId, channelId, timeEpoch) {
     const configuration = new Configuration({
         apiKey: process.env.OPENAI_API_KEY,
@@ -38,7 +52,7 @@ async function chatHandler(message, userId, guildId, channelId, timeEpoch) {
                 role: msg.userId_guildId_channelId.startsWith(userId)
                     ? "user"
                     : "assistant",
-                content: msg.message,
+                content: msg.summary,
             };
         });
         chatMessages.push({
@@ -57,11 +71,19 @@ async function chatHandler(message, userId, guildId, channelId, timeEpoch) {
             userId_guildId_channelId: `${userId}_${guildId}_${channelId}`,
             createTime: timeEpoch,
             message: message,
+            summary:
+                message.length > 1000
+                    ? await summarize(openai, message)
+                    : message,
         });
         writeItem("Messages", {
             userId_guildId_channelId: `${process.env.APP_ID}_${guildId}_${channelId}`,
             createTime: Date.now(),
             message: responseMessage,
+            summary:
+                responseMessage.length > 1000
+                    ? await summarize(openai, responseMessage)
+                    : responseMessage,
         });
 
         return responseMessage;
