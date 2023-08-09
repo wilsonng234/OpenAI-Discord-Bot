@@ -81,12 +81,16 @@ const slashCommands = async (body, timeEpoch) => {
                 userMessage = options.find(
                     (option) => option.name === "message"
                 ).value;
+                const temperature =
+                    options.find((option) => option.name === "style")?.value ||
+                    0.5;
 
                 const { member, guild, channel } = body;
 
                 const embeds = splitMessages(
                     await chatHandler(
                         userMessage,
+                        temperature,
                         member.user.id,
                         guild.id,
                         channel.id,

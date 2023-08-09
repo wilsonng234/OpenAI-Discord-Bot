@@ -13,12 +13,20 @@ const summarize = async (openai, msg) => {
                 content: `Summarize the following message: ${msg}`,
             },
         ],
+        temperature,
     });
 
     return response.data.choices[0].message.content;
 };
 
-async function chatHandler(message, userId, guildId, channelId, timeEpoch) {
+async function chatHandler(
+    message,
+    temperature,
+    userId,
+    guildId,
+    channelId,
+    timeEpoch
+) {
     const configuration = new Configuration({
         apiKey: process.env.OPENAI_API_KEY,
     });
@@ -63,6 +71,7 @@ async function chatHandler(message, userId, guildId, channelId, timeEpoch) {
         const response = await openai.createChatCompletion({
             model: "gpt-3.5-turbo",
             messages: chatMessages,
+            temperature,
         });
 
         const responseMessage = response.data.choices[0].message.content;
