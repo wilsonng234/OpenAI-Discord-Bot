@@ -3,8 +3,35 @@ import axios from "axios";
 import dalleHandler from "./openai/dalle.js";
 import chatHandler from "./openai/chat.js";
 
+const embedDescriptionCharacterLimit = 4096;
+const embedTitleCharacterLimit = 256 - 2; // -2: `> `
+
+const embedTitle = (title) => {
+    if (title.length < embedTitleCharacterLimit) return title;
+
+    const titleWords = title.split(" ");
+    let newTitle = titleWords.shift();
+
+    if (
+        newTitle.length > embedTitleCharacterLimit - 4 &&
+        titleWords.length != 0
+    )
+        return "The user message is too long to display.";
+
+    for (const word of titleWords) {
+        if (newTitle.length + 1 + word.length <= embedTitleCharacterLimit - 4) {
+            newTitle += " ";
+            newTitle += word;
+        } else {
+            newTitle += " ...";
+            break;
+        }
+    }
+
+    return newTitle;
+};
+
 const splitMessages = (message) => {
-    const embedDescriptionCharacterLimit = 4096;
     let currentIndex = 0;
     let embedDescriptions = [];
 
@@ -40,7 +67,7 @@ const slashCommands = async (body, timeEpoch) => {
                 await axios.patch(patchInteractionUrl, {
                     embeds: [
                         {
-                            title: `> ${userMessage}`,
+                            title: `> ${embedTitle(userMessage)}`,
                             image: {
                                 url: await dalleHandler(userMessage, sizeValue),
                             },
@@ -54,12 +81,16 @@ const slashCommands = async (body, timeEpoch) => {
                 userMessage = options.find(
                     (option) => option.name === "message"
                 ).value;
+                const temperature =
+                    options.find((option) => option.name === "style")?.value ||
+                    0.5;
 
                 const { member, guild, channel } = body;
 
                 const embeds = splitMessages(
                     await chatHandler(
                         userMessage,
+                        temperature,
                         member.user.id,
                         guild.id,
                         channel.id,
@@ -67,7 +98,9 @@ const slashCommands = async (body, timeEpoch) => {
                     )
                 ).map((msg, idx) => {
                     return {
-                        ...(idx === 0 && { title: `> ${userMessage}` }),
+                        ...(idx === 0 && {
+                            title: `> ${embedTitle(userMessage)}`,
+                        }),
                         description: msg,
                         color: 3447003,
                     };
@@ -83,7 +116,7 @@ const slashCommands = async (body, timeEpoch) => {
         await axios.patch(patchInteractionUrl, {
             embeds: [
                 {
-                    title: `> ${userMessage}`,
+                    title: `> ${embedTitle(userMessage)}`,
                     description: `Error: ${error.message}`,
                     color: 3447003,
                 },

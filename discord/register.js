@@ -52,6 +52,30 @@ const options = [
             type: 3,
             required: true,
         },
+        {
+            name: "style",
+            description: "Controls the creativity of the bot",
+            type: 4,
+            required: false,
+            choices: [
+                {
+                    name: "Deterministic",
+                    value: 0,
+                },
+                {
+                    name: "Conservative",
+                    value: 0.2,
+                },
+                {
+                    name: "Balanced",
+                    value: 0.5,
+                },
+                {
+                    name: "Creative",
+                    value: 1,
+                },
+            ],
+        },
     ],
 ];
 
