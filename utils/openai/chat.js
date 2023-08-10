@@ -13,7 +13,7 @@ const summarize = async (openai, msg) => {
                 content: `Summarize the following message: ${msg}`,
             },
         ],
-        temperature,
+        temperature: 0,
     });
 
     return response.data.choices[0].message.content;
