@@ -3,7 +3,7 @@ import { verifyKey } from "discord-interactions";
 import { InteractionType } from "discord-interactions";
 import { InteractionResponseType } from "discord-interactions";
 
-import slashCommands from "./utils/slash-commands.js";
+import slashCommands from "./handler/slash-commands.js";
 
 const handler = async (event) => {
     const PUBLIC_KEY = process.env.PUBLIC_KEY;

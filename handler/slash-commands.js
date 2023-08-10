@@ -1,7 +1,7 @@
 import axios from "axios";
 
-import dalleHandler from "./openai/dalle.js";
-import chatHandler from "./openai/chat.js";
+import dalleHandler from "../utils/openai/dalle.js";
+import chatHandler from "../utils/openai/chat.js";
 
 const embedDescriptionCharacterLimit = 4096;
 const embedTitleCharacterLimit = 256 - 2; // -2: `> `
