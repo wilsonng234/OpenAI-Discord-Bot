@@ -10,7 +10,7 @@ const summarize = async (openai, msg) => {
         messages: [
             {
                 role: "user",
-                content: `Summarize the following message: ${msg}`,
+                content: `Summarize the following message within 75words: ${msg}`,
             },
         ],
         temperature: 0,
@@ -81,7 +81,7 @@ async function chatHandler(
             createTime: timeEpoch,
             message: message,
             summary:
-                message.length > 1000
+                message.length > 400
                     ? await summarize(openai, message)
                     : message,
         });
@@ -90,7 +90,7 @@ async function chatHandler(
             createTime: Date.now(),
             message: responseMessage,
             summary:
-                responseMessage.length > 1000
+                responseMessage.length > 400
                     ? await summarize(openai, responseMessage)
                     : responseMessage,
         });
